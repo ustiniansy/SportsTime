@@ -1,0 +1,4 @@
+torch>=2.1
+transformers>=4.45
+accelerate>=0.26
+tqdm

@@ -71,7 +71,7 @@ SportsTime addresses these gaps with questions that require **identifying, local
 
 ## Dataset Structure
 
-We provide **bilingual** (Chinese and English) annotations. The data format is identical across both versions.
+We provide **bilingual** (Chinese and English) annotations. The data format is identical across both versions. The `task_type` field is normalized to five canonical English labels: `Perception`, `Temporal`, `Tactical`, `Causal`, and `Counterfactual`.
 
 ```
 data/                           # Chinese (original)
@@ -106,6 +106,7 @@ Each QA sample is a JSON object:
 | `id` | `string` | Unique sample identifier |
 | `video_id` | `string` | Associated video identifier |
 | `task_type` | `string` | Reasoning category (Perception / Temporal / Tactical / Causal / Counterfactual) |
+| `task_type_raw` | `string` | Original task label before canonical normalization |
 | `question` | `string` | Open-ended question |
 | `CoT` | `string` | Chain-of-thought reasoning with step-wise temporal evidence |
 | `answer` | `string` | Ground-truth answer |
@@ -119,6 +120,7 @@ Each QA sample is a JSON object:
   "id": "Basketball_Full_001_1_1",
   "video_id": "Basketball_Full_001_1",
   "task_type": "Causal",
+  "task_type_raw": "因果推理",
   "question": "At the start of the game, what was the most direct cause of Warriors #30 fouling Thunder #35?",
   "CoT": "1. At 01:48, Thunder #35 holds the ball beyond the three-point line.\n2. At 01:49, Thunder #12 sets a screen for #35.\n3. At 01:50, #35 uses the screen to drive toward the paint.\n4. At 01:52, Warriors #30 fails to navigate the screen, making body contact with #35.\n5. At 01:53, the referee whistles a foul on #30.",
   "answer": "Warriors #30 was caught on the screen while defending",
@@ -139,6 +141,15 @@ Each QA sample is a JSON object:
 We provide a unified evaluation entry point and individual scripts under [`eval/`](eval/). See [`eval/README.md`](eval/README.md) for details.
 
 ```bash
+# Install dependencies
+pip install -r requirements.txt
+
+# Smoke test without loading a judge model
+python eval/evaluate.py \
+  --pred_jsonl examples/predictions.sample.jsonl \
+  --gt_dir data/ \
+  --skip_judge
+
 # Full pipeline: judge → per-task accuracy → SGA
 python eval/evaluate.py \
   --pred_jsonl predictions.jsonl \

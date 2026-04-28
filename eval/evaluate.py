@@ -34,12 +34,12 @@ import sys
 
 
 def run_cmd(cmd: list, desc: str):
-    print(f"\n{'=' * 60}")
-    print(f"  {desc}")
-    print(f"{'=' * 60}\n")
+    print(f"\n{'=' * 60}", flush=True)
+    print(f"  {desc}", flush=True)
+    print(f"{'=' * 60}\n", flush=True)
     result = subprocess.run(cmd, cwd=os.getcwd())
     if result.returncode != 0:
-        print(f"\n[ERROR] {desc} failed with exit code {result.returncode}")
+        print(f"\n[ERROR] {desc} failed with exit code {result.returncode}", flush=True)
         sys.exit(result.returncode)
 
 
@@ -130,9 +130,9 @@ Examples:
         ], "Step 3/3: Step-wise Grounding Alignment (SGA)")
 
     if args.only is None:
-        print(f"\n{'=' * 60}")
-        print("  All evaluations complete.")
-        print(f"{'=' * 60}")
+        print(f"\n{'=' * 60}", flush=True)
+        print("  All evaluations complete.", flush=True)
+        print(f"{'=' * 60}", flush=True)
 
 
 if __name__ == "__main__":

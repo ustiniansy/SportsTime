@@ -69,9 +69,29 @@ def _mmss_to_sec(mm: str, ss: str) -> float:
 
 
 def _hms_to_sec(hh: str, mm: str, ss: str) -> Optional[float]:
-    """Convert HH:MM:SS to seconds. Only valid when HH == 0 (i.e., MM:SS format)."""
-    if int(hh) == 0:
-        return _mmss_to_sec(mm, ss)
+    """Convert HH:MM:SS to seconds."""
+    return float(int(hh) * 3600 + int(mm) * 60 + int(ss))
+
+
+def time_str_to_sec(value: Any) -> Optional[float]:
+    """Convert a timestamp string in MM:SS or HH:MM:SS format to seconds."""
+    if value is None:
+        return None
+    if isinstance(value, (int, float)):
+        return float(value)
+
+    text = str(value).strip()
+    if not text:
+        return None
+
+    hms = re.fullmatch(r"(\d{1,2}):(\d{2}):(\d{2})", text)
+    if hms:
+        return _hms_to_sec(hms.group(1), hms.group(2), hms.group(3))
+
+    mmss = re.fullmatch(r"(\d{1,3}):(\d{2})", text)
+    if mmss:
+        return _mmss_to_sec(mmss.group(1), mmss.group(2))
+
     return None
 
 
@@ -80,8 +100,7 @@ def extract_anchors(text: str) -> Tuple[List[Anchor], bool]:
     Extract temporal anchors from text (model output or CoT annotation).
 
     Parsing order: HH:MM:SS spans/points first (occupy character ranges to
-    prevent MM:SS sub-matches), then MM:SS spans/points. HH:MM:SS with HH != 0
-    counts as having a time reference but is not used for IoU computation.
+    prevent MM:SS sub-matches), then MM:SS spans/points.
 
     Returns:
         anchors: List of valid Anchor objects usable for IoU
@@ -102,8 +121,6 @@ def extract_anchors(text: str) -> Tuple[List[Anchor], bool]:
         occupied.append((m.start(), m.end()))
         s = _hms_to_sec(m.group(1), m.group(2), m.group(3))
         e = _hms_to_sec(m.group(4), m.group(5), m.group(6))
-        if s is None or e is None:
-            continue
         if e < s:
             s, e = e, s
         anchors.append(Anchor(kind="span", s=s, e=e))
@@ -112,8 +129,6 @@ def extract_anchors(text: str) -> Tuple[List[Anchor], bool]:
         has_any_time = True
         occupied.append((m.start(), m.end()))
         t = _hms_to_sec(m.group(1), m.group(2), m.group(3))
-        if t is None:
-            continue
         anchors.append(Anchor(kind="point", t=t))
 
     for m in _MMSS_SPAN_RE.finditer(think):
@@ -141,6 +156,52 @@ def extract_anchors(text: str) -> Tuple[List[Anchor], bool]:
     for a in anchors:
         uniq[a.as_key()] = a
     return list(uniq.values()), has_any_time
+
+
+def anchors_from_time_refs(time_refs: Any) -> Tuple[List[Anchor], bool]:
+    """Extract anchors from the structured ground-truth time_refs field."""
+    if not isinstance(time_refs, list):
+        return [], False
+
+    anchors: List[Anchor] = []
+    has_any_time = False
+
+    for ref in time_refs:
+        if not isinstance(ref, dict):
+            continue
+
+        ref_type = str(ref.get("type", "")).lower()
+        if ref_type in {"ts", "timestamp", "point"} and "ts" in ref:
+            has_any_time = True
+            t = time_str_to_sec(ref.get("ts"))
+            if t is not None:
+                anchors.append(Anchor(kind="point", t=t))
+            continue
+
+        if ref_type in {"span", "range"} and "start" in ref and "end" in ref:
+            has_any_time = True
+            s = time_str_to_sec(ref.get("start"))
+            e = time_str_to_sec(ref.get("end"))
+            if s is None or e is None:
+                continue
+            if e < s:
+                s, e = e, s
+            anchors.append(Anchor(kind="span", s=s, e=e))
+
+    uniq: Dict[Tuple, Anchor] = {}
+    for a in anchors:
+        uniq[a.as_key()] = a
+    return list(uniq.values()), has_any_time
+
+
+def gt_anchors_from_item(item: Dict[str, Any]) -> Tuple[List[Anchor], bool, str]:
+    """Prefer structured time_refs for GT anchors; fall back to CoT text parsing."""
+    anchors, has_time = anchors_from_time_refs(item.get("time_refs"))
+    if has_time:
+        return anchors, has_time, "time_refs"
+
+    anchors, has_time = extract_anchors(item.get("CoT", ""))
+    return anchors, has_time, "cot_text"
 
 
 def anchor_to_span(anchor: Anchor, delta: float = 5.0) -> Tuple[float, float]:
@@ -207,6 +268,7 @@ def main():
     ious: List[float] = []
     hit05 = 0
     missing_gt = 0
+    gt_time_ref_source = {"time_refs": 0, "cot_text": 0}
 
     for row in preds:
         item_id = str(row.get("id", ""))
@@ -220,7 +282,9 @@ def main():
             missing_gt += 1
             continue
 
-        gt_anchors, gt_has_time = extract_anchors(gt.get("CoT", ""))
+        gt_anchors, gt_has_time, source = gt_anchors_from_item(gt)
+        if gt_has_time:
+            gt_time_ref_source[source] += 1
         if not gt_has_time or not pred_has_time:
             continue
 
@@ -248,6 +312,8 @@ def main():
     print(f"Total predictions       : {total}")
     print(f"GT items loaded         : {len(gt_map)}")
     print(f"Predictions missing GT  : {missing_gt}")
+    print(f"GT time source          : time_refs={gt_time_ref_source['time_refs']}, "
+          f"cot_text={gt_time_ref_source['cot_text']}")
     print(f"Anchor(%)               : {anchor_pct:.2f}")
     print(f"Eligible (both w/ time) : {eligible}")
     print(f"mIoU                    : {miou:.4f}")

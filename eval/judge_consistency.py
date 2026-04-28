@@ -17,8 +17,8 @@ from collections import Counter
 from typing import Dict, List, Optional, Tuple
 
 
-def load_labels(path: str) -> Dict[int, int]:
-    """Load binary labels from a judged JSONL file. Returns {problem_id: 0/1}."""
+def load_labels(path: str) -> Dict[str, int]:
+    """Load binary labels from a judged JSONL file. Returns {sample_id: 0/1}."""
     data = {}
     with open(path, "r", encoding="utf-8") as f:
         for line in f:
@@ -37,11 +37,11 @@ def load_labels(path: str) -> Dict[int, int]:
             else:
                 continue
 
-            data[int(pid)] = int(label)
+            data[str(pid)] = int(label)
     return data
 
 
-def pairwise_agreement(a: Dict[int, int], b: Dict[int, int]) -> Tuple[float, int]:
+def pairwise_agreement(a: Dict[str, int], b: Dict[str, int]) -> Tuple[float, int]:
     keys = sorted(set(a) & set(b))
     if not keys:
         return float("nan"), 0
@@ -49,7 +49,7 @@ def pairwise_agreement(a: Dict[int, int], b: Dict[int, int]) -> Tuple[float, int
     return agree / len(keys), len(keys)
 
 
-def cohen_kappa(a: Dict[int, int], b: Dict[int, int]) -> Tuple[float, int]:
+def cohen_kappa(a: Dict[str, int], b: Dict[str, int]) -> Tuple[float, int]:
     keys = sorted(set(a) & set(b))
     if not keys:
         return float("nan"), 0

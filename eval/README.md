@@ -21,11 +21,13 @@ SportsTime uses a **dual-track evaluation protocol**:
 
 ## Requirements
 
+Install the repository requirements from the project root:
+
+```bash
+pip install -r requirements.txt
 ```
-torch>=2.1
-transformers>=4.45
-tqdm
-```
+
+The judge step loads a local Qwen2.5-VL or Qwen3-VL checkpoint, so GPU memory requirements depend on the selected judge model.
 
 ## Prediction Format
 
@@ -52,6 +54,17 @@ Your model should produce a JSONL file where each line is a JSON object:
 ## Quick Start
 
 All commands are run from the repository root.
+
+### Smoke Test (No Judge Model Required)
+
+```bash
+python eval/evaluate.py \
+  --pred_jsonl examples/predictions.sample.jsonl \
+  --gt_dir data/ \
+  --skip_judge
+```
+
+This checks the per-task accuracy and SGA code paths using the included sample predictions.
 
 ### Full Pipeline (Recommended)
 
@@ -112,7 +125,7 @@ python eval/sga_eval.py \
   --gt_dir data/
 ```
 
-Extracts temporal anchors from `pred_answer_raw` and compares against `CoT` in ground-truth data.
+Extracts temporal anchors from `pred_answer_raw` and compares them against ground-truth temporal anchors. For ground truth, the script first uses the structured `time_refs` field and falls back to parsing `CoT` only when `time_refs` are unavailable.
 
 ### 4. Judge Consistency
 
