@@ -26,7 +26,7 @@
 
 - **[2026-04]** Paper available on [arXiv](http://arxiv.org/abs/2604.22226).
 - **[2026-04]** QA annotations, evaluation code, and benchmark data released.
-- **[2026-04]** Video files available upon request (see [Videos](#videos)).
+- **[2026-04]** Video access requests are handled through the [request form](#videos).
 
 ---
 
@@ -164,13 +164,11 @@ Individual scripts are also available:
 
 ## Videos
 
-The video files (~750GB, 1,575 videos) are available upon request for research purposes.
+The video files (~750GB, 1,575 videos) are provided for research purposes after manual review.
 
-To obtain access, please send an email to **caosiyu2024@ia.ac.cn** with:
-- Your name and affiliation
-- A brief description of your intended use
+To request access, please fill out the private [SportsTime Video Access Request Form](https://docs.google.com/forms/d/e/1FAIpQLSe13-x_y5eKap9Ic-u9rJt9dqJrAiqupKmAclkQzMRkAixXYg/viewform).
 
-We will respond with the download link within 1-2 business days.
+We will review requests and provide access instructions manually. Please use the videos only for non-commercial research or educational purposes, and do not redistribute the video files or private access links.
 
 ## Citation
 
