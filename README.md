@@ -24,7 +24,6 @@
 
 ## News
 
-- **[2026-04]** Paper available on [arXiv](http://arxiv.org/abs/2604.22226).
 - **[2026-04]** QA annotations, evaluation code, and benchmark data released.
 - **[2026-04]** Video access links are listed directly in the [Videos](#videos) section.
 
@@ -189,19 +188,6 @@ The video files (~750GB, 1,575 videos) are provided for non-commercial research 
 | Ice Hockey | Highlight | [Aliyun Drive](https://www.alipan.com/s/7FHFcX2MqR4) |
 | Basketball | Full | [Aliyun Drive](https://www.alipan.com/s/eUHV8vv7pMM) |
 | Basketball | Highlight | [Aliyun Drive](https://www.alipan.com/s/stL81uTXGYA) |
-
-## Citation
-
-If you use SportsTime in your research, please cite our paper:
-
-```bibtex
-@article{cao2026sportstime,
-  title   = {Towards Temporal Compositional Reasoning in Long-Form Sports Videos},
-  author  = {Cao, Siyu and Zhang, Lu and Zeng, Ruizhe and Liu, Zhi-yong},
-  journal = {arXiv preprint arXiv:2604.22226},
-  year    = {2026}
-}
-```
 
 ## License
 
