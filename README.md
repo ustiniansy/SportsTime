@@ -26,7 +26,7 @@
 
 - **[2026-04]** Paper available on [arXiv](http://arxiv.org/abs/2604.22226).
 - **[2026-04]** QA annotations, evaluation code, and benchmark data released.
-- **[2026-04]** Video access requests are handled through the [request form](#videos).
+- **[2026-04]** Video access links are listed directly in the [Videos](#videos) section.
 
 ---
 
@@ -175,11 +175,20 @@ Individual scripts are also available:
 
 ## Videos
 
-The video files (~750GB, 1,575 videos) are provided for research purposes after manual review.
+The video files (~750GB, 1,575 videos) are provided for non-commercial research and educational purposes. Please do not redistribute the downloaded video files.
 
-To request access, please fill out the private [SportsTime Video Access Request Form](https://docs.google.com/forms/d/e/1FAIpQLSe13-x_y5eKap9Ic-u9rJt9dqJrAiqupKmAclkQzMRkAixXYg/viewform).
-
-We will review requests and provide access instructions manually. Please use the videos only for non-commercial research or educational purposes, and do not redistribute the video files or private access links.
+| Sport | Split | Video link |
+|---|---|---|
+| Soccer | Full | [Aliyun Drive](https://www.alipan.com/s/AbnjDbSPc6w) |
+| Soccer | Highlight | [Aliyun Drive](https://www.alipan.com/s/nrrTm2LZeiD) |
+| Volleyball | Full | [Aliyun Drive](https://www.alipan.com/s/retpdAA46eW) |
+| Volleyball | Highlight | [Aliyun Drive](https://www.alipan.com/s/mEub7kvrdq1) |
+| American Football | Full | [Aliyun Drive](https://www.alipan.com/s/Ks273A9xi5n) |
+| American Football | Highlight | [Aliyun Drive](https://www.alipan.com/s/2MMAXoSHWm3) |
+| Ice Hockey | Full | [Aliyun Drive](https://www.alipan.com/s/TmxpJgrDiQS) |
+| Ice Hockey | Highlight | [Aliyun Drive](https://www.alipan.com/s/7FHFcX2MqR4) |
+| Basketball | Full | [Aliyun Drive](https://www.alipan.com/s/eUHV8vv7pMM) |
+| Basketball | Highlight | [Aliyun Drive](https://www.alipan.com/s/stL81uTXGYA) |
 
 ## Citation
 
