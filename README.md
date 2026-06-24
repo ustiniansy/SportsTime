@@ -12,7 +12,6 @@
   School of Artificial Intelligence, UCAS &middot; MAIS, Institute of Automation, CAS
 </p>
   <p align="center">
-    <a href="http://arxiv.org/abs/2604.22226"><img src="https://img.shields.io/badge/Paper-arXiv-b31b1b?logo=arxiv" alt="Paper"></a>
     <a href="LICENSE"><img src="https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey" alt="License"></a>
     <img src="https://img.shields.io/badge/QA%20Pairs-14%2C326-green" alt="QA Pairs">
     <img src="https://img.shields.io/badge/Videos-1%2C575-orange" alt="Videos">
