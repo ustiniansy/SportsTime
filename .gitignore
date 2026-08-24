@@ -1,0 +1,32 @@
+# Internal files
+added.json
+original_items_without_time_refs.json
+final_dataset_14326/
+archive_0402/
+arxiv_paper/
+eval_raw/
+data_en_todo/
+_tmp_remote_splits/
+*.zip
+/sportstime.png
+/server_a100.md
+/_hf*
+*.md
+!README.md
+!eval/README.md
+!splits/README.md
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
